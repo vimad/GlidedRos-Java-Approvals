@@ -15,58 +15,62 @@ public class Item {
     }
 
     void updateQuality() {
-        if (!name.equals("Aged Brie")
-            && !name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-            if (quality > 0) {
-                if (!name.equals("Sulfuras, Hand of Ragnaros")) {
-                    quality = quality - 1;
-                }
-            }
-        } else {
+        boolean agedBrie = name.equals("Aged Brie");
+        boolean backstagePasses = name.equals("Backstage passes to a TAFKAL80ETC concert");
+        boolean sulfuras = name.equals("Sulfuras, Hand of Ragnaros");
+        if (agedBrie) {
             if (quality < 50) {
                 quality = quality + 1;
 
-                if (name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-                    if (sellIn < 11) {
-                        if (quality < 50) {
-                            quality = quality + 1;
-                        }
-                    }
+            }
+            sellIn = sellIn - 1;
 
-                    if (sellIn < 6) {
-                        if (quality < 50) {
-                            quality = quality + 1;
-                        }
+            if (sellIn < 0) {
+                if (quality < 50) {
+                    quality = quality + 1;
+                }
+            }
+        } else if (backstagePasses) {
+            if (quality < 50) {
+                quality = quality + 1;
+
+                if (sellIn < 11) {
+                    if (quality < 50) {
+                        quality = quality + 1;
+                    }
+                }
+
+                if (sellIn < 6) {
+                    if (quality < 50) {
+                        quality = quality + 1;
                     }
                 }
             }
-        }
 
-        if (!name.equals("Sulfuras, Hand of Ragnaros")) {
             sellIn = sellIn - 1;
-        }
 
-        if (sellIn < 0) {
-            if (!name.equals("Aged Brie")) {
-                if (!name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-                    if (quality > 0) {
-                        if (!name.equals("Sulfuras, Hand of Ragnaros")) {
-                            quality = quality - 1;
-                        }
-                    }
-                } else {
-                    quality = quality - quality;
-                }
-            } else {
-                if (quality < 50) {
-                    quality = quality + 1;
+            if (sellIn < 0) {
+                quality = 0;
+            }
+        } else if (sulfuras){
+
+        } else {
+            if (quality > 0) {
+                quality = quality - 1;
+            }
+
+            sellIn = sellIn - 1;
+
+            if (sellIn < 0) {
+                if (quality > 0) {
+                    quality = quality - 1;
                 }
             }
         }
     }
 
     @Override
-   public String toString() {
+    public String toString() {
         return this.name + ", " + this.sellIn + ", " + this.quality;
     }
 }
