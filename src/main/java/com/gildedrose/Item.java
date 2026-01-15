@@ -2,6 +2,10 @@ package com.gildedrose;
 
 public class Item {
 
+    public static final String AGED_BRIE = "Aged Brie";
+    public static final String BACKSTAGE_PASSES_TO_A_TAFKAL_80_ETC_CONCERT = "Backstage passes to a TAFKAL80ETC concert";
+    public static final String SULFURAS_HAND_OF_RAGNAROS = "Sulfuras, Hand of Ragnaros";
+
     private static final int MAX_QUALITY = 50;
     private static final int GOOD_CONDITION = 11;
     private static final int EXCELLENT_CONDITION = 6;
@@ -19,21 +23,22 @@ public class Item {
     }
 
     void updateQuality() {
-        boolean agedBrie = name.equals("Aged Brie");
-        boolean backstagePasses = name.equals("Backstage passes to a TAFKAL80ETC concert");
-        boolean sulfuras = name.equals("Sulfuras, Hand of Ragnaros");
-        if (agedBrie) {
+        boolean isAgedBrie = name.equals(AGED_BRIE);
+        boolean isBackstagePasses = name.equals(BACKSTAGE_PASSES_TO_A_TAFKAL_80_ETC_CONCERT);
+        boolean isSulfuras = name.equals(SULFURAS_HAND_OF_RAGNAROS);
+
+        if (isAgedBrie) {
             incrementQualityIfNotMaxQuality();
             decrementSellIn();
             incrementQualityIfExpired();
-        } else if (backstagePasses) {
+        } else if (isBackstagePasses) {
             increaseQualityForBackstagePasses();
             decrementSellIn();
             zeroQualityIfExpired();
-        } else if (sulfuras){
+        } else if (isSulfuras){
 
         } else {
-            decremetQualityIfPossible();
+            decrementQualityIfPossible();
             decrementSellIn();
             decerementQualityIfExpired();
         }
@@ -75,7 +80,7 @@ public class Item {
 
     private void decerementQualityIfExpired() {
         if (isExpired()) {
-            decremetQualityIfPossible();
+            decrementQualityIfPossible();
         }
     }
 
@@ -85,7 +90,7 @@ public class Item {
         }
     }
 
-    private void decremetQualityIfPossible() {
+    private void decrementQualityIfPossible() {
         if (hasSomeQuality()) {
             decrementQuality();
         }
