@@ -2,6 +2,10 @@ package com.gildedrose;
 
 public class Item {
 
+    private static final int MAX_QUALITY = 50;
+    private static final int GOOD_CONDITION = 11;
+    private static final int EXCELLENT_CONDITION = 6;
+
     public String name;
 
     public int sellIn;
@@ -19,54 +23,106 @@ public class Item {
         boolean backstagePasses = name.equals("Backstage passes to a TAFKAL80ETC concert");
         boolean sulfuras = name.equals("Sulfuras, Hand of Ragnaros");
         if (agedBrie) {
-            if (quality < 50) {
-                quality = quality + 1;
-
-            }
-            sellIn = sellIn - 1;
-
-            if (sellIn < 0) {
-                if (quality < 50) {
-                    quality = quality + 1;
-                }
-            }
+            incrementQualityIfNotMaxQuality();
+            decrementSellIn();
+            incrementQualityIfExpired();
         } else if (backstagePasses) {
-            if (quality < 50) {
-                quality = quality + 1;
-
-                if (sellIn < 11) {
-                    if (quality < 50) {
-                        quality = quality + 1;
-                    }
-                }
-
-                if (sellIn < 6) {
-                    if (quality < 50) {
-                        quality = quality + 1;
-                    }
-                }
-            }
-
-            sellIn = sellIn - 1;
-
-            if (sellIn < 0) {
-                quality = 0;
-            }
+            increaseQualityForBackstagePasses();
+            decrementSellIn();
+            zeroQualityIfExpired();
         } else if (sulfuras){
 
         } else {
-            if (quality > 0) {
-                quality = quality - 1;
-            }
-
-            sellIn = sellIn - 1;
-
-            if (sellIn < 0) {
-                if (quality > 0) {
-                    quality = quality - 1;
-                }
-            }
+            decremetQualityIfPossible();
+            decrementSellIn();
+            decerementQualityIfExpired();
         }
+    }
+
+    private void increaseQualityForBackstagePasses() {
+        if (qualityIsNotMAx()) {
+            incrementQuality();
+            incrementQualityIfInGoodCondition();
+            incrementQualityIfInExcellentCondition();
+        }
+    }
+
+    private void incrementQualityIfInExcellentCondition() {
+        if (isInExcellentCondition()) {
+            incrementQualityIfNotMaxQuality();
+        }
+    }
+
+    private void incrementQualityIfInGoodCondition() {
+        if (isInGoodCondition()) {
+            incrementQualityIfNotMaxQuality();
+        }
+    }
+
+    private boolean isInExcellentCondition() {
+        return sellIn < EXCELLENT_CONDITION;
+    }
+
+    private boolean isInGoodCondition() {
+        return sellIn < GOOD_CONDITION;
+    }
+
+    private void incrementQualityIfExpired() {
+        if (isExpired()) {
+            incrementQualityIfNotMaxQuality();
+        }
+    }
+
+    private void decerementQualityIfExpired() {
+        if (isExpired()) {
+            decremetQualityIfPossible();
+        }
+    }
+
+    private void zeroQualityIfExpired() {
+        if (isExpired()) {
+            zeroQuality();
+        }
+    }
+
+    private void decremetQualityIfPossible() {
+        if (hasSomeQuality()) {
+            decrementQuality();
+        }
+    }
+
+    private boolean hasSomeQuality() {
+        return quality > 0;
+    }
+
+    private void decrementQuality() {
+        quality = quality - 1;
+    }
+
+    private void zeroQuality() {
+        quality = 0;
+    }
+
+    private void decrementSellIn() {
+        sellIn = sellIn - 1;
+    }
+
+    private boolean isExpired() {
+        return sellIn < 0;
+    }
+
+    private void incrementQualityIfNotMaxQuality() {
+        if (qualityIsNotMAx()) {
+            incrementQuality();
+        }
+    }
+
+    private boolean qualityIsNotMAx() {
+        return quality < MAX_QUALITY;
+    }
+
+    private void incrementQuality() {
+        quality = quality + 1;
     }
 
     @Override
